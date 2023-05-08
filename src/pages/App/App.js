@@ -14,6 +14,7 @@ function App() {
         <Routes>
           {/* Route components here */}
           <Route path="/orders/new" element={<NewOrderPage />} />
+          <Route path="/orders" element={<OrderHistoryPage />} />
         </Routes>
       ) : (
         <AuthPage />

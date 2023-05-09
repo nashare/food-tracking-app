@@ -23,6 +23,13 @@ export default class SignUpForm extends Component {
         });
     };
 
+    // define the handleSubmit event handler method here per the instructions provided
+    handleSubmit = (evt) => {
+        evt.preventDefault();
+        const stateToString = JSON.stringify(this.state);
+        alert(stateToString);
+    };
+
     render() {
         const disabled = this.state.password !== this.state.confirm;
         return (

@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
 const morgan = require('morgan');
-
 // initialize the express app
 const app = express();
 
@@ -21,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 // mount routes
 // API routes go here
-
+app.use('/api/users', require('./routes/api/users'));
 // "catch all route" - used to always serve index.html
 app.get('/*',(req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));

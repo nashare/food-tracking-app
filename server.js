@@ -21,6 +21,8 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 // mount routes
 // API routes go here
+// Put API routes here, before the "catch all" route
+app.use('/api/users', require('./routes/api/users'));
 
 // "catch all route" - used to always serve index.html
 app.get('/*',(req, res) => {

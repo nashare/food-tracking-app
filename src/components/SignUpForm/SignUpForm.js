@@ -1,5 +1,5 @@
 import { Component } from 'react';
-
+import { signUp } from '../../utilities/users-service';
 /*
 1) Creation phase - when the component first mounts to the DOM
 2) Update phase - when state changes and the component needs to be re-rendered
@@ -24,10 +24,18 @@ export default class SignUpForm extends Component {
     };
 
     // define the handleSubmit event handler method here per the instructions provided
-    handleSubmit = (evt) => {
+    handleSubmit = async (evt) => {
         evt.preventDefault();
-        const stateToString = JSON.stringify(this.state);
-        alert(stateToString);
+        try {
+            const formData = {...this.state};
+            delete formData.confirm;
+            delete formData.error;
+
+            const user = await signUp(formData);
+            console.log(user);
+        } catch {
+            this.setState({error: 'Sign Up Failed - Try Again'});
+        }
     };
 
     render() {

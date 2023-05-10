@@ -29,4 +29,12 @@ const userSchema = new Schema({
     } 
 });
 
+userSchema.pre('save', async function(next) {
+    if(!this.isModified('password')) return next(); // get us outta here; don't hash the password again!
+    this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+    return next(); // return the modified version of the document with the hashed/salted password to be saved to the database
+});
+
+
+
 module.exports = mongoose.model('User', userSchema);

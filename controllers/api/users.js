@@ -1,13 +1,18 @@
 const User = require('../../models/user');
 const jwt = require('jsonwebtoken');
 
+// Be Sure to add the following
+const bcrypt = require('bcrypt');
+
 module.exports = {
-    create
+  create,
+  login
 };
 
 async function create(req, res) {
     try {
         // 1) create the user
+        console.log(req.body)
         const user = await User.create(req.body);
         // 2) create the jwt by passing in the user info for the jwt payload
         const token = createJWT(user); // creates a "JSON" webtoken
@@ -15,9 +20,24 @@ async function create(req, res) {
         res.json(token);
     } catch (error) {
         // if error, we'll send the error to the client
+        console.log(error)
         res.status(400).json(error);
     }
 }
+
+async function login(req, res) {
+    try {
+      console.log(req.body)
+      const user = await User.findOne({ email: req.body.email });
+      console.log(user)
+      if (!user) throw new Error();
+      const match = await bcrypt.compare(req.body.password, user.password);
+      if (!match) throw new Error();
+      res.json( createJWT(user) );
+    } catch {
+      res.status(400).json('Bad Credentials');
+    }
+  }
 
 
 function createJWT(user) {

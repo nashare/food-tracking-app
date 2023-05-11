@@ -28,6 +28,17 @@ export function getUser() {
     return token ? JSON.parse(atob(token.split('.')[1])).user : null;
 };
 
+export async function login(userData) {
+    const token = await userAPI.login(userData);
+    localStorage.setItem('token', token);
+    return getUser();
+};
+
+export function logOut() {
+    localStorage.removeItem('token');
+}
+
+
 /*
     {
         iat: 1525355525,

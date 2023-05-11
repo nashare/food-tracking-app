@@ -11,12 +11,12 @@ import OrderHistoryPage from '../OrderHistoryPage/OrderHistoryPage';
 import { getUser } from '../../utilities/users-service';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(getUser());
   return (
     <main className="App">
       {user ? (
         <>
-          <NavBar user={user} />
+          <NavBar user={user} setUser={setUser} />
           <Routes>
             {/* Route components here */}
             <Route path="/orders/new" element={<NewOrderPage />} />

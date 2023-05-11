@@ -6,7 +6,8 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
   create,
-  login
+  login,
+  checkToken
 };
 
 async function create(req, res) {
@@ -45,4 +46,10 @@ function createJWT(user) {
     // jwt.sign() is a special method that does two things:
     // 1) creates a json web token with the provided payload, server secret and optional settings
     // 2) crytographically signs the token with the provided secret so it can be validated later
+}
+
+function checkToken(req, res) {
+    // req.user will always be ther for you when a token is sent!
+    console.log('req.user ', req.user);
+    res.json(req.exp);
 }

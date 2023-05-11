@@ -11,7 +11,7 @@ import OrderHistoryPage from '../OrderHistoryPage/OrderHistoryPage';
 import { getUser } from '../../utilities/users-service';
 
 function App() {
-  const [user, setUser] = useState(getUser());
+  const [user, setUser] = useState(null);
   return (
     <main className="App">
       {user ? (

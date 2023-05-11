@@ -4,7 +4,6 @@ import { signUp } from '../../utilities/users-service';
 1) Creation phase - when the component first mounts to the DOM
 2) Update phase - when state changes and the component needs to be re-rendered
 3) Destruction Phase - when the UI needs to be replaced with a newer version
-
 */
 
 export default class SignUpForm extends Component {
@@ -33,8 +32,10 @@ export default class SignUpForm extends Component {
 
             const user = await signUp(formData);
 
+
             // set user state with the user object returned by signUp
             this.props.setUser(user);
+
         } catch {
             this.setState({error: 'Sign Up Failed - Try Again'});
         }

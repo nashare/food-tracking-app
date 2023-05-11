@@ -1,29 +1,15 @@
+import sendRequest from './send-request';
+
 const BASE_URL = "/api/users";
 
-export async function signUp(userData) {
-  const res = await fetch(BASE_URL, {
-    method: "POST",
-    headers: { "Content-type": "Application/json" },
-    body: JSON.stringify(userData),
-  });
-
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error("Invalid Sign Up");
-  }
+export function signUp(userData) {
+    return sendRequest(BASE_URL, 'POST', userData);
 }
 
-export async function login(credentials) {
-  const res = await fetch(`${BASE_URL}/login`, {
-    method: "POST",
-    headers: { "Content-type": "Application/json" },
-    body: JSON.stringify(credentials),
-  });
+export function login(credentials) {
+    return sendRequest(`${BASE_URL}/login`, 'POST', credentials);
+}
 
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error("Invalid User");
-  }
+export function checkToken(credentials) {
+    return sendRequest(`${BASE_URL}/check-token`);
 }

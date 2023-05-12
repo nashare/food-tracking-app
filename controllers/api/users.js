@@ -38,7 +38,7 @@ async function login(req, res) {
     } catch {
       res.status(400).json('Bad Credentials');
     }
-  }
+}
 
 
 function createJWT(user) {

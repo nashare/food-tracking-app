@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-function MealsPage({ userId }) {
+function MealsPage({user}) {
   const [meals, setMeals] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`/api/meals/${userId}`, {
+        const response = await fetch(`/api/meals/${user}`, {
           method: 'GET',
           headers: {
             Authorization: token,
@@ -24,13 +24,16 @@ function MealsPage({ userId }) {
     };
 
     fetchData();
-  }, [userId]);
+  }, [user]);
 
   return (
     <div>
       <ul>
         {meals.map((meal) => (
-          <li key={meal.dateAndTime}>{meal.description} - {meal.calories} calories</li>
+          <div>
+            <li key={meal.id}>{meal.dateAndTime}, {meal.description} - {meal.calories} calories</li>
+          <br></br>
+          </div>
         ))}
       </ul>
     </div>

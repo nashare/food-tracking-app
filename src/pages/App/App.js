@@ -21,7 +21,7 @@ function App() {
           <Routes>
             {/* Route components here */}
             <Route path="/meals/new" element={<NewMealPage />} />
-            <Route path="/meals" userId={user._id}  element={<MealsPage />} />
+            <Route path="/meals" element={<MealsPage user={user._id} />} />
           </Routes>
         </>
       ) : (

@@ -8,12 +8,14 @@ function MealsPage({ user }) {
     description: '',
     calories: '',
   });
+  const [filterFrom, setFilterFrom] = useState('');
+  const [filterTo, setFilterTo] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`/api/meals/${user}`, {
+        const response = await fetch(`/api/meals/${user._id}`, {
           method: 'GET',
           headers: {
             Authorization: token,
@@ -23,6 +25,30 @@ function MealsPage({ user }) {
           throw new Error('Failed to fetch meals');
         }
         const data = await response.json();
+        data.sort((a, b) => {
+          const dateA = new Date(a.dateAndTime);
+          const dateB = new Date(b.dateAndTime);
+          return dateB - dateA;
+        });
+        let i = 0;
+        while (i < data.length) {
+          let caloriesCounter = data[i].calories;
+          let c = i+1;
+          while (c < data.length && data[c].dateAndTime.slice(0, 10) === data[i].dateAndTime.slice(0, 10)) {
+            caloriesCounter += data[c].calories
+            c++;
+          }
+          if (caloriesCounter > localStorage.getItem('caloriesPerDay')) {
+            for (let m = i; m < c; m++) {
+              data[m].color = "red";
+            }
+          } else {
+            for (let m = i; m < c; m++) {
+              data[m].color = "green";
+            }
+          }
+          i = c;
+        }
         setMeals(data);
       } catch (error) {
         console.error('Error fetching meals:', error);
@@ -90,12 +116,42 @@ function MealsPage({ user }) {
     setMealToEdit(null);
   };
 
+  const handleFilter = () => {
+    const filteredMeals = meals.filter((meal) => {
+      const mealDate = new Date(meal.dateAndTime);
+      const fromDate = new Date(filterFrom);
+      const toDate = new Date(filterTo);
+
+      // Check if the meal date is within the selected range.
+      return mealDate >= fromDate && mealDate <= toDate;
+    });
+
+    // Update the state with the filtered meals.
+    setMeals(filteredMeals);
+  };
+
   return (
     <div>
+      <div>
+        {/* Date filtering inputs */}
+        <input
+          type="date"
+          placeholder="From Date"
+          value={filterFrom}
+          onChange={(e) => setFilterFrom(e.target.value)}
+        />
+        <input
+          type="date"
+          placeholder="To Date"
+          value={filterTo}
+          onChange={(e) => setFilterTo(e.target.value)}
+        />
+        <button onClick={handleFilter}>Filter</button>
+      </div>
       <ul>
         {meals.map((meal) => (
           <div key={meal._id}>
-            <li>
+            <li className={meal.color === 'red' ? 'red-meal' : meal.color === 'green' ? 'green-meal' : ''}>
               {meal.dateAndTime}, {meal.description} - {meal.calories} calories
             </li>
             <button onClick={() => handleEdit(meal)}>Edit</button>

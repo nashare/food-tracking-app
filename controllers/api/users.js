@@ -7,20 +7,16 @@ const bcrypt = require('bcrypt');
 module.exports = {
   create,
   login,
-  checkToken
+  checkToken, 
+  update
 };
 
 async function create(req, res) {
     try {
-        // 1) create the user
-        console.log(req.body)
         const user = await User.create(req.body);
-        // 2) create the jwt by passing in the user info for the jwt payload
-        const token = createJWT(user); // creates a "JSON" webtoken
-        // 3) send the new jwt to the client using res.json
+        const token = createJWT(user);
         res.json(token);
     } catch (error) {
-        // if error, we'll send the error to the client
         console.log(error)
         res.status(400).json(error);
     }
@@ -28,9 +24,7 @@ async function create(req, res) {
 
 async function login(req, res) {
     try {
-      console.log(req.body)
       const user = await User.findOne({ email: req.body.email });
-      console.log(user)
       if (!user) throw new Error();
       const match = await bcrypt.compare(req.body.password, user.password);
       if (!match) throw new Error();
@@ -40,16 +34,29 @@ async function login(req, res) {
     }
 }
 
+async function update(req, res) {
+  try {
+    const { caloriesPerDay } = req.body;
+    const userId = req.user._id;
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { caloriesPerDay },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    return res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating caloriesPerDay:', error);
+    return res.status(500).json({ error: 'An error occurred while updating caloriesPerDay' });
+  }
+}
 
 function createJWT(user) {
     return jwt.sign({ user }, process.env.SECRET, {expiresIn: '24h'});
-    // jwt.sign() is a special method that does two things:
-    // 1) creates a json web token with the provided payload, server secret and optional settings
-    // 2) crytographically signs the token with the provided secret so it can be validated later
 }
 
 function checkToken(req, res) {
-    // req.user will always be ther for you when a token is sent!
-    console.log('req.user ', req.user);
     res.json(req.exp);
 }

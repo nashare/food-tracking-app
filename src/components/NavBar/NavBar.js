@@ -15,7 +15,7 @@ export default function NavBar({ user, setUser }) {
       &nbsp; | &nbsp;
       <Link to="/meals/new">New Meal</Link>
       {user && <span>&nbsp;Welcome, {user.name}</span>}
-      {user && <span>&nbsp; <CaloriesPerDay user={user} /> </span>}
+      {user && <span>&nbsp; <CaloriesPerDay user={user} setUser={setUser} /> </span>}
       &nbsp; | &nbsp;
       <Link to="" onClick={handleLogOut}>Log Out</Link>
     </nav>

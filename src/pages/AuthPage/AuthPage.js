@@ -12,24 +12,18 @@ export default function AuthPage({ setUser }) {
         {userStatus ? (
           <>
             <div className="left">
-              <div className="logo">
                 <button onClick={() => setUserStatus(!userStatus)}>
-                  SEI Cafe
+                  Sign Up
                 </button>
-              </div>
-              <h3>Sign Up</h3>
             </div>
             <LoginForm setUser={setUser} />
           </>
         ) : (
           <>
             <div className="left">
-              <div className="logo">
                 <button onClick={() => setUserStatus(!userStatus)}>
-                  SEI Cafe
+                  Log In
                 </button>
-              </div>
-              <h3>Already a User?</h3>
             </div>
             <SignUpForm setUser={setUser} />
           </>

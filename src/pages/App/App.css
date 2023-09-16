@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.red-meal {
+  color: red;
+}
+
+.green-meal {
+  color: green;
+}

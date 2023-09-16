@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function CaloriesPerDay({ user }) {
+export default function CaloriesPerDay({ user, setUser }) {
     const [isEditing, setIsEditing] = useState(false);
     const [editedCaloriesPerDay, setEditedCaloriesPerDay] = useState(user.caloriesPerDay);
 
@@ -8,17 +8,34 @@ export default function CaloriesPerDay({ user }) {
         setIsEditing(true);
     };
 
-    const handleSaveClick = () => {
-        // Perform your logic to save the edited value
-        // For example, you can make an API request here to update the value in the backend
-        // Once saved, update the local state and set isEditing to false
-        // In this example, we're just updating the local state for demonstration
-        setIsEditing(false);
-        user.caloriesPerDay = editedCaloriesPerDay;
+    useEffect(() => {
+        setEditedCaloriesPerDay(localStorage.getItem('caloriesPerDay'));
+    }, [user]);
+    
+    const handleSaveClick = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('/api/users', {
+                method: 'PATCH',
+                headers: {
+                    Authorization: token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ caloriesPerDay: editedCaloriesPerDay }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update meal');
+            }
+            const data = await response.json();
+            setUser(data);
+            localStorage.setItem('caloriesPerDay', data.caloriesPerDay);
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Error updating meal:', error);
+        }
     };
 
     const handleCancelClick = () => {
-        // Cancel the edit and reset the edited value
         setIsEditing(false);
         setEditedCaloriesPerDay(user.caloriesPerDay);
     };
@@ -42,7 +59,7 @@ export default function CaloriesPerDay({ user }) {
                     </div>
                 ) : (
                     <div>
-                        Your calories per day value is: {user.caloriesPerDay}
+                        Your calories per day value is: {editedCaloriesPerDay}
                         <button onClick={handleEditClick}>Edit</button>
                     </div>
                 )}

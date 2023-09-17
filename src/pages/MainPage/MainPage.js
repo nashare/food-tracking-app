@@ -1,7 +1,7 @@
 export default function MainPage() {
     return (
         <div className="section is-small">
-            <h1 className="title  has-text-centered">Welcome to the Food Tracker - Your personal meal management application!</h1>
+            <h1 className="title  has-text-centered">Welcome to the Food Tracker - your personal meal management application!</h1>
             <h2 className="subtitle my-2"><i class="fa-solid fa-circle-check"></i>&nbsp; Getting Started</h2>
                 <p className="my-1">To use the Food Tracker, you can create an account and log in. Once you're logged in, you gain access to a set of powerful features that help you manage your daily meals and caloric intake effectively.</p>
 

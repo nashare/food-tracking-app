@@ -158,23 +158,35 @@ function MealsPage({ user }) {
   const totalCalories = meals.reduce((total, meal) => total + meal.calories, 0);
 
   return (
-    <div>
-        <MealFilter
-        filterFrom={filterFrom}
-        filterTo={filterTo}
-        onFilterChange={handleFilterChange}
-        onFilter={handleFilter}
-        onCancelFilter={handleCancelFilter}
+    <div className="container is-flex is-flex-direction-column is-justify-content-center is-align-items-center mt-6 mb-6">
+      <MealFilter
+      filterFrom={filterFrom}
+      filterTo={filterTo}
+      onFilterChange={handleFilterChange}
+      onFilter={handleFilter}
+      onCancelFilter={handleCancelFilter}
       />
-      <ul>
+      <ul className="columns is-multiline pt-6 center">
         {meals.map((meal) => (
-          <div key={meal._id}>
-            <li className={meal.color === 'red' ? 'red-meal' : meal.color === 'green' ? 'green-meal' : ''}>
-              {meal.dateAndTime.split('T')[0]}, {meal.dateAndTime.split('T')[1].slice(0,8)}, {meal.description} - {meal.calories} calories
+          <div className="column is-narrow" >
+            <li className="card" key={meal._id}>
+              <div className="card-content">              
+              <p>
+                Date: {meal.dateAndTime.split('T')[0]}
+              </p>
+              <p>
+                Time: {meal.dateAndTime.split('T')[1].slice(0, 5)}
+              </p>
+              <div className={meal.color === 'red' ? 'has-text-danger' : meal.color === 'green' ? 'has-text-success' : ''}>
+                <p>{meal.description}</p>
+                <p>{meal.calories} calories</p>
+              </div>
+              </div>
+            <footer className="card-footer">
+                <p className="card-footer-item" onClick={() => handleEdit(meal)}>Edit</p>
+                <p className="card-footer-item" onClick={() => handleDelete(meal._id)}>Delete</p>
+            </footer>
             </li>
-            <button onClick={() => handleEdit(meal)}>Edit</button>
-            <button onClick={() => handleDelete(meal._id)}>Delete</button>
-            <br></br>
             {mealToEdit && mealToEdit._id === meal._id && (
               <div>
                 <form onSubmit={handleUpdate}>
@@ -201,7 +213,7 @@ function MealsPage({ user }) {
           </div>
         ))}
       </ul>
-      <p>Total Calories: {totalCalories} calories</p>
+      <p className="title is-4 pt-4">Total Calories: {totalCalories} calories</p>
     </div>
   );
 }

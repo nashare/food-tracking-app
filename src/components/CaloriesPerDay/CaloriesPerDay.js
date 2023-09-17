@@ -49,14 +49,17 @@ export default function CaloriesPerDay({ user, setUser }) {
             <div>
                 {isEditing ? (
                     <div>
-                        <input
-                            type="number"
-                            value={editedCaloriesPerDay}
-                            onChange={handleInputChange}
-                        />
-                        &nbsp;
-                        <i class="fa-solid fa-check" onClick={handleSaveClick}></i>&nbsp;
-                        <i class="fa-solid fa-xmark" onClick={handleCancelClick}></i>
+                        <div className="field has-addons is-grouped">
+                            <div class="control">
+                                <input className="input is-small" type="number" min="0" value={editedCaloriesPerDay} onChange={handleInputChange} required />
+                            </div>
+                            <div class="control is-flex is-align-items-center">
+                                <i class="fa-solid fa-check" onClick={handleSaveClick}></i>
+                            </div>
+                            <div class="control is-flex is-align-items-center">
+                                <i class="fa-solid fa-xmark" onClick={handleCancelClick}></i>
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     <div>

@@ -41,48 +41,44 @@ export default function SignUpForm({ setUser }) {
         <div>
             <div>
                 <form autoComplete="off" onSubmit={handleSubmit}>
-                    <label>Name</label>
-                    <input
-                        placeholder="Your name"
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
-                    <label>Email</label>
-                    <input
-                        placeholder="Email"
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                    <label>Password</label>
-                    <input
-                        placeholder="Password"
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                    <label>Confirm</label>
-                    <input
-                        placeholder="Confirm password"
-                        type="password"
-                        name="confirm"
-                        value={formData.confirm}
-                        onChange={handleChange}
-                        required
-                    />
-                    <button type="submit" disabled={disabled}>
-                        Sign Up
-                    </button>
+                    <div className="field">
+                        <p class="control has-icons-left">
+                            <input className="input is-medium" type="text" name="name" placeholder="Your name" value={formData.name} onChange={handleChange} required />
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div className="field">
+                        <p class="control has-icons-left">
+                            <input className="input is-medium" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div className="field">
+                        <p class="control has-icons-left">
+                            <input className="input is-medium" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div className="field">
+                        <p class="control has-icons-left">
+                            <input className="input is-medium" type="password" name="confirm" placeholder="Confirm password" value={formData.confirm} onChange={handleChange} required />
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div className="field has-text-centered">
+                        <button className="button is-medium is-info mt-3" type="submit" disabled={disabled}>Sign Up</button>
+                    </div>
                 </form>
             </div>
-            <p>&nbsp;{formData.error}</p>
+            <p className="has-text-danger-dark has-text-centered mt-4 is-size-5">{formData.error}</p>
         </div>
     );
 }

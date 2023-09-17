@@ -50,11 +50,11 @@ export default function LoginForm({ setUser }) {
             </p>
           </div>
           <div className="field has-text-centered">
-            <button className="button is-medium is-success mt-3" type="submit">Log In</button>
+            <button className="button is-medium is-info mt-3" type="submit">Log In</button>
           </div>
         </form>
       </div>
-      <p className="has-text-danger-dark">&nbsp;{error}</p>
+      <p className="has-text-danger-dark has-text-centered mt-4 is-size-5">{error}</p>
     </div>
   );
 }

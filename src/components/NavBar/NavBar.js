@@ -9,7 +9,7 @@ export default function NavBar({ user, setUser }) {
   }
 
   return (
-    <nav className="navbar is-success p-2" role="navigation" aria-label="main navigation">
+    <nav className="navbar is-info p-2" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
         <Link to="/" className="navbar-item is-family-monospace has-text-weight-bold is-size-4">Food Tracker</Link>
       </div>

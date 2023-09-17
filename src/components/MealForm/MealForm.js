@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 function MealForm() {
+
   const [formData, setFormData] = useState({
     dateAndTime: '',
     description: '',
@@ -30,7 +31,6 @@ function MealForm() {
           calories: formData.calories,
         }),
       });
-
       if (!response.ok) {
         throw new Error('Failed to create meal');
       }
@@ -39,40 +39,52 @@ function MealForm() {
     }
   };
 
+  const disabled = formData.dateAndTime === "" || formData.calories === "" || formData.description === "";
+
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>Date and Time:</label>
+      <div className="field">
+        <label className="label">Date and Time:</label>
+        <div class="control">
         <input
+          className="input is-medium"
           type="datetime-local"
           name="dateAndTime"
           value={formData.dateAndTime}
           onChange={handleChange}
           required
         />
+        </div>
       </div>
-      <div>
-        <label>Description:</label>
+      <div className="field">
+        <label className="label">Description:</label>
+        <div class="control">
         <input
+          className="input is-medium"
           type="text"
           name="description"
           value={formData.description}
           onChange={handleChange}
           required
         />
+        </div>
       </div>
-      <div>
-        <label>Calories:</label>
+      <div className="field">
+        <label className="label">Calories:</label>
+        <div class="control">
         <input
+          className="input is-medium"
           type="number"
           name="calories"
           value={formData.calories}
           onChange={handleChange}
+          min="0"
           required
         />
+        </div>
       </div>
-      <div>
-        <button type="submit">Add Meal</button>
+      <div className="field has-text-centered">
+        <button className="button is-medium is-info mt-3" type="submit" disabled={disabled}>Add Meal</button>
       </div>
     </form>
   );

@@ -59,7 +59,7 @@ export default function CaloriesPerDay({ user, setUser }) {
                     </div>
                 ) : (
                     <div>
-                        Your calories per day value is: {editedCaloriesPerDay}
+                        {user.name}, your calories per day value is: {editedCaloriesPerDay}
                         <button onClick={handleEditClick}>Edit</button>
                     </div>
                 )}

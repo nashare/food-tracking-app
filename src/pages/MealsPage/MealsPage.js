@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
+import MealFilter from "../../components/MealFilter/MealFilter";
+
 
 function MealsPage({ user }) {
   const [meals, setMeals] = useState([]);
+  const [originalMeals, setOriginalMeals] = useState([]);
   const [mealToEdit, setMealToEdit] = useState(null);
   const [editedMeal, setEditedMeal] = useState({
     dateAndTime: '',
     description: '',
     calories: '',
   });
+  const currentDate = new Date().toISOString().split('T')[0];
   const [filterFrom, setFilterFrom] = useState('');
-  const [filterTo, setFilterTo] = useState('');
+  const [filterTo, setFilterTo] = useState(currentDate);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +54,7 @@ function MealsPage({ user }) {
           i = c;
         }
         setMeals(data);
+        setOriginalMeals(data);
       } catch (error) {
         console.error('Error fetching meals:', error);
       }
@@ -117,42 +122,55 @@ function MealsPage({ user }) {
   };
 
   const handleFilter = () => {
-    const filteredMeals = meals.filter((meal) => {
-      const mealDate = new Date(meal.dateAndTime);
-      const fromDate = new Date(filterFrom);
-      const toDate = new Date(filterTo);
+    let filteredMeals;
+    if (filterFrom === "") {
+      const toDate = new Date(filterTo).toISOString().split('T')[0];
+      filteredMeals = originalMeals.filter((meal) => {
+        const mealDate = new Date(meal.dateAndTime).toISOString().split('T')[0];
+        return mealDate <= toDate;
+      });
+    } else {
+      const fromDate = new Date(filterFrom).toISOString().split('T')[0];
+      const toDate = new Date(filterTo).toISOString().split('T')[0];
+      filteredMeals = originalMeals.filter((meal) => {
+        const mealDate = new Date(meal.dateAndTime).toISOString().split('T')[0];
+        return mealDate >= fromDate && mealDate <= toDate;
+      });
+    }
 
-      // Check if the meal date is within the selected range.
-      return mealDate >= fromDate && mealDate <= toDate;
-    });
-
-    // Update the state with the filtered meals.
     setMeals(filteredMeals);
   };
 
+  const handleCancelFilter = () => {
+    setFilterFrom('');
+    setFilterTo(currentDate);
+    setMeals(originalMeals);
+  };
+
+  const handleFilterChange = (field, value) => {
+    if (field === 'filterFrom') {
+      setFilterFrom(value);
+    } else if (field === 'filterTo') {
+      setFilterTo(value);
+    }
+  };
+
+  const totalCalories = meals.reduce((total, meal) => total + meal.calories, 0);
+
   return (
     <div>
-      <div>
-        {/* Date filtering inputs */}
-        <input
-          type="date"
-          placeholder="From Date"
-          value={filterFrom}
-          onChange={(e) => setFilterFrom(e.target.value)}
-        />
-        <input
-          type="date"
-          placeholder="To Date"
-          value={filterTo}
-          onChange={(e) => setFilterTo(e.target.value)}
-        />
-        <button onClick={handleFilter}>Filter</button>
-      </div>
+        <MealFilter
+        filterFrom={filterFrom}
+        filterTo={filterTo}
+        onFilterChange={handleFilterChange}
+        onFilter={handleFilter}
+        onCancelFilter={handleCancelFilter}
+      />
       <ul>
         {meals.map((meal) => (
           <div key={meal._id}>
             <li className={meal.color === 'red' ? 'red-meal' : meal.color === 'green' ? 'green-meal' : ''}>
-              {meal.dateAndTime}, {meal.description} - {meal.calories} calories
+              {meal.dateAndTime.split('T')[0]}, {meal.dateAndTime.split('T')[1].slice(0,8)}, {meal.description} - {meal.calories} calories
             </li>
             <button onClick={() => handleEdit(meal)}>Edit</button>
             <button onClick={() => handleDelete(meal._id)}>Delete</button>
@@ -183,6 +201,7 @@ function MealsPage({ user }) {
           </div>
         ))}
       </ul>
+      <p>Total Calories: {totalCalories} calories</p>
     </div>
   );
 }

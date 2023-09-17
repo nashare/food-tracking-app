@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import * as usersService from '../../utilities/users-service';
 
 export default function LoginForm({ setUser }) {
+  const navigate = useNavigate();
+
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
@@ -14,14 +17,13 @@ export default function LoginForm({ setUser }) {
   }
 
   async function handleSubmit(evt) {
-    // Prevent form from being submitted to the server
     evt.preventDefault();
     try {
-      // The promise returned by the signUp service method
-      // will resolve to the user object included in the
-      // payload of the JSON Web Token (JWT)
       const user = await usersService.login(credentials);
-      setUser(user);
+      if (user) {
+        setUser(user);
+        navigate("/");
+      }
     } catch {
       setError('Log In Failed - Try Again');
     }
@@ -29,16 +31,30 @@ export default function LoginForm({ setUser }) {
 
   return (
     <div>
-      <div className="form-container">
+      <div>
         <form autoComplete="off" onSubmit={handleSubmit}>
-          <label>Email</label>
-          <input type="text" name="email" value={credentials.email} onChange={handleChange} required />
-          <label>Password</label>
-          <input type="password" name="password" value={credentials.password} onChange={handleChange} required />
-          <button type="submit">LOG IN</button>
+          <div className="field">
+            <p class="control has-icons-left">
+              <input className="input is-medium" type="text" name="email" placeholder="Email" value={credentials.email} onChange={handleChange} required />
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </p>
+          </div>
+          <div className="field">
+            <p class="control has-icons-left">
+              <input className="input is-medium" type="password" name="password" placeholder="Password" value={credentials.password} onChange={handleChange} required />
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div>
+          <div className="field has-text-centered">
+            <button className="button is-medium is-success mt-3" type="submit">Log In</button>
+          </div>
         </form>
       </div>
-      <p className="error-message">&nbsp;{error}</p>
+      <p className="has-text-danger-dark">&nbsp;{error}</p>
     </div>
   );
 }

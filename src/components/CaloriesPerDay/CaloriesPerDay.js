@@ -54,13 +54,14 @@ export default function CaloriesPerDay({ user, setUser }) {
                             value={editedCaloriesPerDay}
                             onChange={handleInputChange}
                         />
-                        <button onClick={handleSaveClick}>Save</button>
-                        <button onClick={handleCancelClick}>Cancel</button>
+                        &nbsp;
+                        <i class="fa-solid fa-check" onClick={handleSaveClick}></i>&nbsp;
+                        <i class="fa-solid fa-xmark" onClick={handleCancelClick}></i>
                     </div>
                 ) : (
                     <div>
-                        {user.name}, your calories per day value is: {editedCaloriesPerDay}
-                        <button onClick={handleEditClick}>Edit</button>
+                        <i class="fa-solid fa-pen" onClick={handleEditClick}></i>
+                            &nbsp;{editedCaloriesPerDay} calories per day
                     </div>
                 )}
             </div>

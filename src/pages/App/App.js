@@ -15,8 +15,10 @@ function App() {
   const [user, setUser] = useState(getUser());
   
   return (
-    <main className="App">
+    <main>
+      <header>
       <NavBar user={user} setUser={setUser} />
+      </header>
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LogInPage setUser={setUser} />} />

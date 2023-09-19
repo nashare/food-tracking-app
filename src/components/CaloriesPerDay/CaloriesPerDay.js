@@ -1,11 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function CaloriesPerDay({ user, setUser, isEditing, setIsEditing }) {
     const [editedCaloriesPerDay, setEditedCaloriesPerDay] = useState(user.caloriesPerDay);
-
-    useEffect(() => {
-        setEditedCaloriesPerDay(localStorage.getItem('caloriesPerDay'));
-    }, [user]);
 
     const handleSaveClick = async () => {
         try {

@@ -166,7 +166,7 @@ function MealsPage({ user }) {
       onFilter={handleFilter}
       onCancelFilter={handleCancelFilter}
       />
-      <ul className="columns is-multiline pt-6 center">
+      <ul className="columns is-multiline p-6 is-centered">
         {meals.map((meal) => (
           <div className="column is-narrow" >
             <li className="card" key={meal._id}>

@@ -37,7 +37,7 @@ function MealsPage({ user }) {
         let i = 0;
         while (i < data.length) {
           let caloriesCounter = data[i].calories;
-          let c = i+1;
+          let c = i + 1;
           while (c < data.length && data[c].dateAndTime.slice(0, 10) === data[i].dateAndTime.slice(0, 10)) {
             caloriesCounter += data[c].calories
             c++;
@@ -160,54 +160,69 @@ function MealsPage({ user }) {
   return (
     <div className="container is-flex is-flex-direction-column is-justify-content-center is-align-items-center mt-6 mb-6">
       <MealFilter
-      filterFrom={filterFrom}
-      filterTo={filterTo}
-      onFilterChange={handleFilterChange}
-      onFilter={handleFilter}
-      onCancelFilter={handleCancelFilter}
+        filterFrom={filterFrom}
+        filterTo={filterTo}
+        onFilterChange={handleFilterChange}
+        onFilter={handleFilter}
+        onCancelFilter={handleCancelFilter}
       />
       <ul className="columns is-multiline p-6 is-centered">
         {meals.map((meal) => (
-          <div className="column is-narrow" >
-            <li className="card" key={meal._id}>
-              <div className="card-content">              
-              <p>
-                Date: {meal.dateAndTime.split('T')[0]}
-              </p>
-              <p>
-                Time: {meal.dateAndTime.split('T')[1].slice(0, 5)}
-              </p>
-              <div className={meal.color === 'red' ? 'has-text-danger' : meal.color === 'green' ? 'has-text-success' : ''}>
-                <p>{meal.description}</p>
-                <p>{meal.calories} calories</p>
-              </div>
-              </div>
-            <footer className="card-footer">
-                <p className="card-footer-item" onClick={() => handleEdit(meal)}>Edit</p>
-                <p className="card-footer-item" onClick={() => handleDelete(meal._id)}>Delete</p>
-            </footer>
-            </li>
-            {mealToEdit && mealToEdit._id === meal._id && (
-              <div>
+          <div key={meal._id}>
+            {mealToEdit && mealToEdit._id === meal._id ? (
+              <div className="column is-narrow">
+                <li className="card">
                 <form onSubmit={handleUpdate}>
+                  <div className="card-content">
+                  <div className="field">
                   <input
-                    type="text"
+                    className="input is-small"
+                    type="datetime-local"
+                    max={currentDate}
                     value={editedMeal.dateAndTime}
                     onChange={(e) => handleInputChange(e, 'dateAndTime')}
                   />
+                      </div>
+                      <div className="field">
                   <input
+                    className="input is-small"
                     type="text"
                     value={editedMeal.description}
                     onChange={(e) => handleInputChange(e, 'description')}
                   />
+                      </div>
+                  <div className="field">
                   <input
-                    type="text"
+                    className="input is-small"
+                    type="number"
                     value={editedMeal.calories}
                     onChange={(e) => handleInputChange(e, 'calories')}
                   />
-                  <button type="submit">Update</button>
-                  <button type="button" onClick={handleCancel}>Cancel</button>
+                      </div>
+                  </div>
+                    <footer className="card-footer">
+                      <button className="card-footer-item p-button" type="submit">Update</button>
+                      <button className="card-footer-item p-button" type="button" onClick={handleCancel}>Cancel</button>
+                  </footer>
                 </form>
+                </li>
+              </div>
+            ) : (
+              <div className="column is-narrow">
+                <li className="card">
+                  <div className="card-content">
+                    <p>Date: {meal.dateAndTime.split('T')[0]}</p>
+                    <p>Time: {meal.dateAndTime.split('T')[1].slice(0, 5)}</p>
+                    <div className={meal.color === 'red' ? 'has-text-danger' : meal.color === 'green' ? 'has-text-success' : ''}>
+                      <p>{meal.description}</p>
+                      <p>{meal.calories} calories</p>
+                    </div>
+                  </div>
+                    <footer className="card-footer">
+                      <p className="card-footer-item p-link" onClick={() => handleEdit(meal)}>Edit</p>
+                      <p className="card-footer-item p-link" onClick={() => handleDelete(meal._id)}>Delete</p>
+                    </footer>
+                </li>
               </div>
             )}
           </div>
@@ -216,6 +231,8 @@ function MealsPage({ user }) {
       <p className="title is-4 pt-4">Total Calories: {totalCalories} calories</p>
     </div>
   );
+
+
 }
 
 export default MealsPage;

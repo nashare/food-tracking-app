@@ -3,11 +3,10 @@ import { useState, useEffect } from 'react';
 export default function CaloriesPerDay({ user, setUser, isEditing, setIsEditing }) {
     const [editedCaloriesPerDay, setEditedCaloriesPerDay] = useState(user.caloriesPerDay);
 
-
     useEffect(() => {
         setEditedCaloriesPerDay(localStorage.getItem('caloriesPerDay'));
     }, [user]);
-    
+
     const handleSaveClick = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -31,11 +30,6 @@ export default function CaloriesPerDay({ user, setUser, isEditing, setIsEditing 
         }
     };
 
-    // const handleCancelClick = () => {
-    //     setIsEditing(false);
-    //     setEditedCaloriesPerDay(user.caloriesPerDay);
-    // };
-
     const handleInputChange = (e) => {
         setEditedCaloriesPerDay(e.target.value);
     };
@@ -57,10 +51,11 @@ export default function CaloriesPerDay({ user, setUser, isEditing, setIsEditing 
                 ) : (
                     <div>
                         <i className="fa-solid fa-pen"></i>
-                            &nbsp;{editedCaloriesPerDay} calories per day
+                        &nbsp;{editedCaloriesPerDay} calories per day
                     </div>
                 )}
             </div>
         </div>
     );
 }
+

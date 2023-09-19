@@ -23,21 +23,21 @@ export default function NavBar({ user, setUser }) {
       </div>
       <div className="navbar-menu is-active">
         <ul className="navbar-end">
-      {user ? (
-        <>
+          {user ? (
+            <>
               <Link to="/meals" className="navbar-item"><i className="fa-solid fa-utensils"></i>&nbsp; All Meals</Link>
               <Link to="/meals/new" className="navbar-item"><i className="fa-solid fa-plus"></i>&nbsp; New Meal</Link>
               <Link className="navbar-item" onClick={handleEditClick}>
                 <CaloriesPerDay user={user} setUser={setUser} isEditing={isEditing} setIsEditing={setIsEditing} />
               </Link>
               <Link to="" onClick={handleLogOut} className="navbar-item"><i className="fa-solid fa-right-from-bracket"></i>&nbsp; Log Out</Link>
-        </>
-      ) : (
-        <>
-                <Link to="/login" className="navbar-item"><i className="fa-solid fa-right-to-bracket"></i>&nbsp; Log In</Link>
-                <Link to="/signup" className="navbar-item"><i className="fa-solid fa-user-plus"></i>&nbsp; Sign Up</Link>
-        </>
-      )}
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="navbar-item"><i className="fa-solid fa-right-to-bracket"></i>&nbsp; Log In</Link>
+              <Link to="/signup" className="navbar-item"><i className="fa-solid fa-user-plus"></i>&nbsp; Sign Up</Link>
+            </>
+          )}
         </ul>
       </div>
     </nav>

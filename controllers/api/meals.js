@@ -2,6 +2,8 @@ const Meal = require('../../models/meal');
 
 async function create(req, res) {
     try {
+        let newDate = new Date(req.body.dateAndTime);
+        console.log(newDate);
         const { dateAndTime, description, calories } = req.body;
         const userId = req.user._id;
         const newMeal = new Meal({

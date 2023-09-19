@@ -11,9 +11,8 @@ function MealsPage({ user }) {
     description: '',
     calories: '',
   });
-  const currentDate = new Date().toISOString().split('T')[0];
   const [filterFrom, setFilterFrom] = useState('');
-  const [filterTo, setFilterTo] = useState(currentDate);
+  const [filterTo, setFilterTo] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -122,19 +121,22 @@ function MealsPage({ user }) {
   };
 
   const handleFilter = () => {
+    if (filterTo === "" && filterFrom === "" ) {
+      return
+    }
     let filteredMeals;
     if (filterFrom === "") {
-      const toDate = new Date(filterTo).toISOString().split('T')[0];
       filteredMeals = originalMeals.filter((meal) => {
-        const mealDate = new Date(meal.dateAndTime).toISOString().split('T')[0];
-        return mealDate <= toDate;
+        return meal.dateAndTime.slice(0, 10) <= filterTo;
       });
-    } else {
-      const fromDate = new Date(filterFrom).toISOString().split('T')[0];
-      const toDate = new Date(filterTo).toISOString().split('T')[0];
+    } else if (filterTo === "") {
       filteredMeals = originalMeals.filter((meal) => {
-        const mealDate = new Date(meal.dateAndTime).toISOString().split('T')[0];
-        return mealDate >= fromDate && mealDate <= toDate;
+        return meal.dateAndTime.slice(0, 10) >= filterFrom;
+      });
+    }
+    else {
+      filteredMeals = originalMeals.filter((meal) => {
+        return meal.dateAndTime.slice(0, 10) >= filterFrom && meal.dateAndTime.slice(0, 10) <= filterTo;
       });
     }
 
@@ -143,7 +145,7 @@ function MealsPage({ user }) {
 
   const handleCancelFilter = () => {
     setFilterFrom('');
-    setFilterTo(currentDate);
+    setFilterTo('');
     setMeals(originalMeals);
   };
 
@@ -175,30 +177,28 @@ function MealsPage({ user }) {
                 <form onSubmit={handleUpdate}>
                   <div className="card-content">
                   <div className="field">
-                  <input
-                    className="input is-small"
-                    type="datetime-local"
-                    max={currentDate}
-                    value={editedMeal.dateAndTime}
-                    onChange={(e) => handleInputChange(e, 'dateAndTime')}
-                  />
-                      </div>
-                      <div className="field">
-                  <input
-                    className="input is-small"
-                    type="text"
-                    value={editedMeal.description}
-                    onChange={(e) => handleInputChange(e, 'description')}
-                  />
-                      </div>
-                  <div className="field">
-                  <input
-                    className="input is-small"
-                    type="number"
-                    value={editedMeal.calories}
-                    onChange={(e) => handleInputChange(e, 'calories')}
-                  />
-                      </div>
+                    <input
+                      className="input is-small"
+                      type="datetime-local"
+                      onChange={(e) => handleInputChange(e, 'dateAndTime')}
+                    />
+                    </div>
+                    <div className="field">
+                      <input
+                        className="input is-small"
+                        type="text"
+                        value={editedMeal.description}
+                        onChange={(e) => handleInputChange(e, 'description')}
+                      />
+                    </div>
+                    <div className="field">
+                      <input
+                        className="input is-small"
+                        type="number"
+                        value={editedMeal.calories}
+                        onChange={(e) => handleInputChange(e, 'calories')}
+                      />
+                    </div>
                   </div>
                     <footer className="card-footer">
                       <button className="card-footer-item p-button" type="submit">Update</button>
@@ -211,8 +211,8 @@ function MealsPage({ user }) {
               <div className="column is-narrow">
                 <li className="card">
                   <div className="card-content">
-                    <p>Date: {meal.dateAndTime.split('T')[0]}</p>
-                    <p>Time: {meal.dateAndTime.split('T')[1].slice(0, 5)}</p>
+                      <p>Date: {new Date(meal.dateAndTime).toLocaleString().split(', ')[0]}</p>
+                      <p>Time: {new Date(meal.dateAndTime).toLocaleString().split(', ')[1]}</p>
                     <div className={meal.color === 'red' ? 'has-text-danger' : meal.color === 'green' ? 'has-text-success' : ''}>
                       <p>{meal.description}</p>
                       <p>{meal.calories} calories</p>

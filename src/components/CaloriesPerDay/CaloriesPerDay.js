@@ -1,12 +1,8 @@
 import { useState, useEffect } from 'react';
 
-export default function CaloriesPerDay({ user, setUser }) {
-    const [isEditing, setIsEditing] = useState(false);
+export default function CaloriesPerDay({ user, setUser, isEditing, setIsEditing }) {
     const [editedCaloriesPerDay, setEditedCaloriesPerDay] = useState(user.caloriesPerDay);
 
-    const handleEditClick = () => {
-        setIsEditing(true);
-    };
 
     useEffect(() => {
         setEditedCaloriesPerDay(localStorage.getItem('caloriesPerDay'));
@@ -35,10 +31,10 @@ export default function CaloriesPerDay({ user, setUser }) {
         }
     };
 
-    const handleCancelClick = () => {
-        setIsEditing(false);
-        setEditedCaloriesPerDay(user.caloriesPerDay);
-    };
+    // const handleCancelClick = () => {
+    //     setIsEditing(false);
+    //     setEditedCaloriesPerDay(user.caloriesPerDay);
+    // };
 
     const handleInputChange = (e) => {
         setEditedCaloriesPerDay(e.target.value);
@@ -50,20 +46,17 @@ export default function CaloriesPerDay({ user, setUser }) {
                 {isEditing ? (
                     <div>
                         <div className="field has-addons is-grouped">
-                            <div class="control">
+                            <div className="control">
                                 <input className="input is-small" type="number" min="0" value={editedCaloriesPerDay} onChange={handleInputChange} required />
                             </div>
-                            <div class="control is-flex is-align-items-center">
-                                <i class="fa-solid fa-check" onClick={handleSaveClick}></i>
-                            </div>
-                            <div class="control is-flex is-align-items-center">
-                                <i class="fa-solid fa-xmark" onClick={handleCancelClick}></i>
+                            <div className="control is-flex is-align-items-center">
+                                <i className="fa-solid fa-check" onClick={handleSaveClick}></i>
                             </div>
                         </div>
                     </div>
                 ) : (
                     <div>
-                        <i class="fa-solid fa-pen" onClick={handleEditClick}></i>
+                        <i className="fa-solid fa-pen"></i>
                             &nbsp;{editedCaloriesPerDay} calories per day
                     </div>
                 )}

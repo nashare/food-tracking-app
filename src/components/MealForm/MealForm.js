@@ -7,6 +7,7 @@ function MealForm() {
     description: '',
     calories: '',
   });
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,42 +46,42 @@ function MealForm() {
     <form onSubmit={handleSubmit}>
       <div className="field">
         <label className="label">Date and Time:</label>
-        <div class="control">
-        <input
-          className="input is-medium"
-          type="datetime-local"
-          name="dateAndTime"
-          value={formData.dateAndTime}
-          onChange={handleChange}
-          required
-        />
+        <div className="control">
+          <input
+            className="input is-medium"
+            type="datetime-local"
+            name="dateAndTime"
+            value={formData.dateAndTime}
+            onChange={handleChange}
+            required
+          />
         </div>
       </div>
       <div className="field">
         <label className="label">Description:</label>
-        <div class="control">
-        <input
-          className="input is-medium"
-          type="text"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          required
-        />
+        <div className="control">
+          <input
+            className="input is-medium"
+            type="text"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
         </div>
       </div>
       <div className="field">
         <label className="label">Calories:</label>
-        <div class="control">
-        <input
-          className="input is-medium"
-          type="number"
-          name="calories"
-          value={formData.calories}
-          onChange={handleChange}
-          min="0"
-          required
-        />
+        <div className="control">
+          <input
+            className="input is-medium"
+            type="number"
+            name="calories"
+            value={formData.calories}
+            onChange={handleChange}
+            min="0"
+            required
+          />
         </div>
       </div>
       <div className="field has-text-centered">
@@ -91,4 +92,3 @@ function MealForm() {
 }
 
 export default MealForm;
-

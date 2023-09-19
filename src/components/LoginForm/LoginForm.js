@@ -34,18 +34,18 @@ export default function LoginForm({ setUser }) {
       <div>
         <form autoComplete="off" onSubmit={handleSubmit}>
           <div className="field">
-            <p class="control has-icons-left">
+            <p className="control has-icons-left">
               <input className="input is-medium" type="text" name="email" placeholder="Email" value={credentials.email} onChange={handleChange} required />
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
+              <span className="icon is-small is-left">
+                <i className="fas fa-envelope"></i>
               </span>
             </p>
           </div>
           <div className="field">
-            <p class="control has-icons-left">
+            <p className="control has-icons-left">
               <input className="input is-medium" type="password" name="password" placeholder="Password" value={credentials.password} onChange={handleChange} required />
-              <span class="icon is-small is-left">
-                <i class="fas fa-lock"></i>
+              <span className="icon is-small is-left">
+                <i className="fas fa-lock"></i>
               </span>
             </p>
           </div>

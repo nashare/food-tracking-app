@@ -8,7 +8,8 @@ module.exports = {
   create,
   login,
   checkToken, 
-  update
+  update,
+  get
 };
 
 async function create(req, res) {
@@ -20,6 +21,19 @@ async function create(req, res) {
         console.log(error)
         res.status(400).json(error);
     }
+}
+
+async function get(req, res) {
+  try{
+    const userId = req.params.userId;
+    const user = await User.find({ id: userId });
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({
+      error: 'An error occurred while fetching user'
+    })
+  }
 }
 
 async function login(req, res) {

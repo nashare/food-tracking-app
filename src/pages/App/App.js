@@ -9,10 +9,10 @@ import SignUpPage from '../SignUpPage/SignUpPage';
 import MainPage from '../MainPage/MainPage';
 import LogInPage from '../LogInPage/LogInPage';
 
-import { getUser } from '../../utilities/users-service';
+import { getUserInfo } from '../../utilities/users-service';
 
 function App() {
-  const [user, setUser] = useState(getUser());
+  const [user, setUser] = useState(getUserInfo());
   
   return (
     <main>

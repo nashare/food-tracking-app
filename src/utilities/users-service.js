@@ -6,6 +6,11 @@ export async function signUp(userData) {
   return getUser();
 }
 
+export function getUser() {
+  const token = getToken();
+  return token ? JSON.parse(atob(token.split('.')[1])).user : null;
+}
+
 export function getToken() {
   // attempt get the tokem from localstorage
   const token = localStorage.getItem("token");
@@ -23,9 +28,31 @@ export function getToken() {
   return token;
 }
 
-export function getUser() {
+export function getUserInfo() {
   const token = getToken();
-  return token ? JSON.parse(atob(token.split('.')[1])).user : null;
+  if (!token) return null;
+  const userId = JSON.parse(atob(token.split('.')[1])).user._id;
+  let user = null;
+  const fetchData = async () => {
+  try {
+    const response = await fetch(`/api/users/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      body: JSON.stringify(),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to get user');
+    }
+      user = await response.json();
+    } catch (error) {
+      console.error('Error getting user:', error);
+    }
+  }
+  fetchData();
+  return user;
 }
 
 export async function login(userData) {
@@ -48,18 +75,3 @@ export function checkToken() {
       .then((dateStr) => new Date(dateStr))
   );
 }
-
-/*
-    {
-        iat: 1525355525,
-        exp: 1525355765,
-        user: {
-            name: 'jane'
-            email: 'jane@email.com',
-            createdAt: '2023-05-10',
-            updatedAt: '2023-05-10',
-            ObjectId: 'ui92tetg2g872giu272',
-        }
-    }
-
-*/

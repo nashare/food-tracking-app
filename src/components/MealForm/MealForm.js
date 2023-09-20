@@ -17,7 +17,8 @@ function MealForm() {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const token = localStorage.getItem("token");
       const response = await fetch('/api/meals/new', {
@@ -35,6 +36,11 @@ function MealForm() {
       if (!response.ok) {
         throw new Error('Failed to create meal');
       }
+      setFormData({
+        dateAndTime: '',
+        description: '',
+        calories: '',
+      });
     } catch (error) {
       console.error('Error creating meal:', error);
     }

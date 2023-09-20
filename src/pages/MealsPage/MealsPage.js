@@ -95,7 +95,8 @@ function MealsPage({ user }) {
     }));
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`/api/meals/edit/${mealToEdit._id}`, {

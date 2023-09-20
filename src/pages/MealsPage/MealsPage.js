@@ -27,7 +27,7 @@ function MealsPage({ user }) {
     while (i < data.length) {
       let caloriesCounter = data[i].calories;
       let c = i + 1;
-      while (c < data.length && new Date(data[c].dateAndTime).toLocaleString().split(', ')[0] === new Date(data[i].dateAndTime).toLocaleString().split(', ')[0]) {
+      while (c < data.length && new Date(data[c].dateAndTime).toLocaleString("en-US").split(', ')[0] === new Date(data[i].dateAndTime).toLocaleString("en-US").split(', ')[0]) {
         caloriesCounter += data[c].calories
         c++;
       }
@@ -45,28 +45,29 @@ function MealsPage({ user }) {
     return data;
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/meals/${user._id}`, {
-          method: 'GET',
-          headers: {
-            Authorization: token,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch meals');
-        }
-        let data = await response.json();
-        data = sortMeals(data);
-        data = applyColors(data);
-        setMeals(data);
-        setOriginalMeals(data);
-      } catch (error) {
-        console.error('Error fetching meals:', error);
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/meals/${user._id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch meals');
       }
-    };
+      let data = await response.json();
+      data = sortMeals(data);
+      data = applyColors(data);
+      setMeals(data);
+      setOriginalMeals(data);
+    } catch (error) {
+      console.error('Error fetching meals:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [user]);
 
@@ -82,7 +83,8 @@ function MealsPage({ user }) {
       if (!response.ok) {
         throw new Error('Failed to delete meal');
       }
-      setMeals((prevMeals) => prevMeals.filter((meal) => meal._id !== mealId));
+      fetchData();
+      // setMeals((prevMeals) => prevMeals.filter((meal) => meal._id !== mealId));
     } catch (error) {
       console.error('Error deleting meal:', error);
     }
@@ -119,13 +121,14 @@ function MealsPage({ user }) {
       if (!response.ok) {
         throw new Error('Failed to update meal');
       }
-      const updatedMeal = await response.json();
-      setMeals(prevMeals => {
-        const updatedMeals = prevMeals.map(meal =>
-          meal._id === updatedMeal.meal._id ? updatedMeal.meal : meal
-        );
-        return applyColors(sortMeals(updatedMeals));
-      });
+      // const updatedMeal = await response.json();
+      // setMeals(prevMeals => {
+      //   const updatedMeals = prevMeals.map(meal =>
+      //     meal._id === updatedMeal.meal._id ? updatedMeal.meal : meal
+      //   );
+      //   return applyColors(sortMeals(updatedMeals));
+      // });
+      fetchData();
       setMealToEdit(null);
     } catch (error) {
       console.error('Error updating meal:', error);
@@ -143,28 +146,38 @@ function MealsPage({ user }) {
     }
     let filteredMeals;
     if (filterFrom === "") {
+      const dateTo = new Date(filterTo);
+      dateTo.setDate(dateTo.getDate() + 1);
       filteredMeals = originalMeals.filter((meal) => {
-        return meal.dateAndTime.slice(0, 10) <= filterTo;
+        const mealDateToLocale = new Date(meal.dateAndTime).toLocaleString("en-US").split(', ')[0];
+        const dateMeal = new Date(mealDateToLocale);
+        return dateMeal <= dateTo;
       });
     } else if (filterTo === "") {
+      const dateFrom = new Date(filterFrom)
       filteredMeals = originalMeals.filter((meal) => {
-        return meal.dateAndTime.slice(0, 10) >= filterFrom;
+        const mealDateToLocale = new Date(meal.dateAndTime).toLocaleString("en-US").split(', ')[0];
+        const dateMeal = new Date(mealDateToLocale);
+        return dateMeal >= dateFrom;
       });
     }
     else {
       filteredMeals = originalMeals.filter((meal) => {
-        //console.log(new Date(meal.dateAndTime).toLocaleString().split(', ')[0]);
-        return meal.dateAndTime.slice(0, 10) >= filterFrom && meal.dateAndTime.slice(0, 10) <= filterTo;
+        const dateTo = new Date(filterTo);
+        const dateFrom = new Date(filterFrom);
+        dateTo.setDate(dateTo.getDate() + 1);
+        const mealDateToLocale = new Date(meal.dateAndTime).toLocaleString("en-US").split(', ')[0];
+        const dateMeal = new Date(mealDateToLocale);
+        return dateMeal >= dateFrom && dateMeal <= dateTo;
       });
     }
-
     setMeals(filteredMeals);
   };
 
   const handleCancelFilter = () => {
     setFilterFrom('');
     setFilterTo('');
-    setMeals(originalMeals);
+    fetchData();
   };
 
   const handleFilterChange = (field, value) => {
@@ -229,8 +242,8 @@ function MealsPage({ user }) {
               <div className="column is-narrow">
                 <li className="card">
                   <div className="card-content">
-                      <p>Date: {new Date(meal.dateAndTime).toLocaleString().split(', ')[0]}</p>
-                      <p>Time: {new Date(meal.dateAndTime).toLocaleString().split(', ')[1]}</p>
+                      <p>Date: {new Date(meal.dateAndTime).toLocaleString("en-US").split(', ')[0]}</p>
+                      <p>Time: {new Date(meal.dateAndTime).toLocaleString("en-US").split(', ')[1]}</p>
                     <div className={meal.color === 'red' ? 'has-text-danger' : meal.color === 'green' ? 'has-text-success' : ''}>
                       <p>{meal.description}</p>
                       <p>{meal.calories} calories</p>

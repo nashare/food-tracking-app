@@ -39,8 +39,8 @@ export default function CaloriesPerDay({ user, setUser, isEditing, setIsEditing 
                             <div className="control">
                                 <input className="input is-small" type="number" min="0" value={editedCaloriesPerDay} onChange={handleInputChange} required />
                             </div>
-                            <div className="control is-flex is-align-items-center">
-                                <i className="fa-solid fa-check" onClick={handleSaveClick}></i>
+                            <div className="control is-flex is-align-items-center" onClick={handleSaveClick}>
+                                <i className="fa-solid fa-check"></i>
                             </div>
                         </div>
                     </div>

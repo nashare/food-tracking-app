@@ -3,7 +3,8 @@ import { useState } from 'react';
 export default function CaloriesPerDay({ user, setUser, isEditing, setIsEditing }) {
     const [editedCaloriesPerDay, setEditedCaloriesPerDay] = useState(user.caloriesPerDay);
 
-    const handleSaveClick = async () => {
+    const handleSaveClick = async (e) => {
+        e.preventDefault();
         try {
             const token = localStorage.getItem('token');
             const response = await fetch('/api/users', {
@@ -19,7 +20,6 @@ export default function CaloriesPerDay({ user, setUser, isEditing, setIsEditing 
             }
             const data = await response.json();
             setUser(data);
-            localStorage.setItem('caloriesPerDay', data.caloriesPerDay);
             setIsEditing(false);
         } catch (error) {
             console.error('Error updating meal:', error);

@@ -14,6 +14,37 @@ function MealsPage({ user }) {
   const [filterFrom, setFilterFrom] = useState('');
   const [filterTo, setFilterTo] = useState('');
 
+  const sortMeals = (meals) => {
+    return meals.sort((a, b) => {
+      const dateA = new Date(a.dateAndTime);
+      const dateB = new Date(b.dateAndTime);
+      return dateB - dateA;
+    });
+  };
+
+  function applyColors(data) {
+    let i = 0;
+    while (i < data.length) {
+      let caloriesCounter = data[i].calories;
+      let c = i + 1;
+      while (c < data.length && new Date(data[c].dateAndTime).toLocaleString().split(', ')[0] === new Date(data[i].dateAndTime).toLocaleString().split(', ')[0]) {
+        caloriesCounter += data[c].calories
+        c++;
+      }
+      if (caloriesCounter > user.caloriesPerDay) {
+        for (let m = i; m < c; m++) {
+          data[m].color = "red";
+        }
+      } else {
+        for (let m = i; m < c; m++) {
+          data[m].color = "green";
+        }
+      }
+      i = c;
+    }
+    return data;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,31 +58,9 @@ function MealsPage({ user }) {
         if (!response.ok) {
           throw new Error('Failed to fetch meals');
         }
-        const data = await response.json();
-        data.sort((a, b) => {
-          const dateA = new Date(a.dateAndTime);
-          const dateB = new Date(b.dateAndTime);
-          return dateB - dateA;
-        });
-        let i = 0;
-        while (i < data.length) {
-          let caloriesCounter = data[i].calories;
-          let c = i + 1;
-          while (c < data.length && data[c].dateAndTime.slice(0, 10) === data[i].dateAndTime.slice(0, 10)) {
-            caloriesCounter += data[c].calories
-            c++;
-          }
-          if (caloriesCounter > localStorage.getItem('caloriesPerDay')) {
-            for (let m = i; m < c; m++) {
-              data[m].color = "red";
-            }
-          } else {
-            for (let m = i; m < c; m++) {
-              data[m].color = "green";
-            }
-          }
-          i = c;
-        }
+        let data = await response.json();
+        data = sortMeals(data);
+        data = applyColors(data);
         setMeals(data);
         setOriginalMeals(data);
       } catch (error) {
@@ -107,10 +116,16 @@ function MealsPage({ user }) {
         },
         body: JSON.stringify(editedMeal),
       });
-
       if (!response.ok) {
         throw new Error('Failed to update meal');
       }
+      const updatedMeal = await response.json();
+      setMeals(prevMeals => {
+        const updatedMeals = prevMeals.map(meal =>
+          meal._id === updatedMeal.meal._id ? updatedMeal.meal : meal
+        );
+        return applyColors(sortMeals(updatedMeals));
+      });
       setMealToEdit(null);
     } catch (error) {
       console.error('Error updating meal:', error);
@@ -121,7 +136,8 @@ function MealsPage({ user }) {
     setMealToEdit(null);
   };
 
-  const handleFilter = () => {
+  const handleFilter = (e) => {
+    e.preventDefault();
     if (filterTo === "" && filterFrom === "" ) {
       return
     }
@@ -137,6 +153,7 @@ function MealsPage({ user }) {
     }
     else {
       filteredMeals = originalMeals.filter((meal) => {
+        //console.log(new Date(meal.dateAndTime).toLocaleString().split(', ')[0]);
         return meal.dateAndTime.slice(0, 10) >= filterFrom && meal.dateAndTime.slice(0, 10) <= filterTo;
       });
     }

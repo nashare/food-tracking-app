@@ -60,7 +60,7 @@ async function update(req, res) {
         meal.description = req.body.description;
         meal.calories = req.body.calories;
         await meal.save();
-        res.status(200).json({ message: 'Meal updated successfully', meal });
+        res.status(200).json({ message: 'Meal updated successfully', meal: meal });
     } catch (error) {
         console.error('Error updating meal:', error);
         res.status(500).json({ error: 'An error occurred while updating the meal' });

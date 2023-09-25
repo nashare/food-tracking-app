@@ -49,6 +49,7 @@ async function login(req, res) {
 
 async function update(req, res) {
   try {
+    console.log('here', req);
     const { caloriesPerDay } = req.body;
     const userId = req.user._id;
     const updatedUser = await User.findByIdAndUpdate(
@@ -56,11 +57,13 @@ async function update(req, res) {
       { caloriesPerDay },
       { new: true }
     );
+    console.log("user", updatedUser);
     if (!updatedUser) {
       return res.status(404).json({ error: 'User not found' });
     }
     return res.json(updatedUser);
   } catch (error) {
+    console.log('error');
     return res.status(500).json({ error: 'An error occurred while updating caloriesPerDay' });
   }
 }

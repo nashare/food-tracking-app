@@ -1,7 +1,6 @@
 const User = require('../../models/user');
 const jwt = require('jsonwebtoken');
 
-// Be Sure to add the following
 const bcrypt = require('bcrypt');
 
 module.exports = {
@@ -62,7 +61,6 @@ async function update(req, res) {
     }
     return res.json(updatedUser);
   } catch (error) {
-    console.error('Error updating caloriesPerDay:', error);
     return res.status(500).json({ error: 'An error occurred while updating caloriesPerDay' });
   }
 }

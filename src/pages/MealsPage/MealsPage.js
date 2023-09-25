@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { applyColors } from "./utils/mealUtils";
 import MealFilter from "../../components/MealFilter/MealFilter";
-
 
 function MealsPage({ user }) {
   const [meals, setMeals] = useState([]);
@@ -22,29 +22,6 @@ function MealsPage({ user }) {
     });
   };
 
-  function applyColors(data) {
-    let i = 0;
-    while (i < data.length) {
-      let caloriesCounter = data[i].calories;
-      let c = i + 1;
-      while (c < data.length && new Date(data[c].dateAndTime).toLocaleString("en-US").split(', ')[0] === new Date(data[i].dateAndTime).toLocaleString("en-US").split(', ')[0]) {
-        caloriesCounter += data[c].calories
-        c++;
-      }
-      if (caloriesCounter > user.caloriesPerDay) {
-        for (let m = i; m < c; m++) {
-          data[m].color = "red";
-        }
-      } else {
-        for (let m = i; m < c; m++) {
-          data[m].color = "green";
-        }
-      }
-      i = c;
-    }
-    return data;
-  }
-
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -59,7 +36,7 @@ function MealsPage({ user }) {
       }
       let data = await response.json();
       data = sortMeals(data);
-      data = applyColors(data);
+      data = applyColors(data, user.caloriesPerDay);
       setMeals(data);
       setOriginalMeals(data);
     } catch (error) {
@@ -69,7 +46,7 @@ function MealsPage({ user }) {
 
   useEffect(() => {
     fetchData();
-  }, [user]);
+  }, [fetchData]);
 
   const handleDelete = async (mealId) => {
     try {

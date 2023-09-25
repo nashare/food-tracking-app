@@ -1,4 +1,3 @@
-// requiring the jsonwebtoken module
 const jwt = require("jsonwebtoken");
 
 // middleware signature (req, res, next)
@@ -10,6 +9,11 @@ module.exports = function (req, res, next) {
     token = token.replace("Bearer ", "");
     // Check if token is valid and not expired
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
+      // If valid token, decoded will be the token's entire payload
+      // If invalid token, err will be se
+      console.log("-------------DECODED-------------");
+      console.log(decoded);
+      console.log("---------------------------------");
       req.user = err ? null : decoded.user;
       // If your app cares... (optional)
       req.exp = err ? null : new Date(decoded.exp * 1000);

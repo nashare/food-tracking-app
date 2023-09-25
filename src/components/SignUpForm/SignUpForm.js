@@ -30,6 +30,7 @@ export default function SignUpForm({ setUser }) {
                 setUser(user);
                 navigate('/');
             }
+            console.log(error);
         } catch {
             setFormData({ ...formData, error: 'Sign Up Failed - Try Again' });
         }
@@ -51,7 +52,7 @@ export default function SignUpForm({ setUser }) {
                     </div>
                     <div className="field">
                         <p className="control has-icons-left">
-                            <input className="input is-medium" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+                            <input className="input is-medium" type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
                             <span className="icon is-small is-left">
                                 <i className="fas fa-envelope"></i>
                             </span>
@@ -59,7 +60,7 @@ export default function SignUpForm({ setUser }) {
                     </div>
                     <div className="field">
                         <p className="control has-icons-left">
-                            <input className="input is-medium" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+                            <input className="input is-medium" type="password" name="password" placeholder="Password" minLength={3} value={formData.password} onChange={handleChange} required />
                             <span className="icon is-small is-left">
                                 <i className="fas fa-lock"></i>
                             </span>
@@ -67,7 +68,7 @@ export default function SignUpForm({ setUser }) {
                     </div>
                     <div className="field">
                         <p className="control has-icons-left">
-                            <input className="input is-medium" type="password" name="confirm" placeholder="Confirm password" value={formData.confirm} onChange={handleChange} required />
+                            <input className="input is-medium" type="password" name="confirm" placeholder="Confirm password" minLength={3} value={formData.confirm} onChange={handleChange} required />
                             <span className="icon is-small is-left">
                                 <i className="fas fa-lock"></i>
                             </span>

@@ -35,7 +35,7 @@ export default function LoginForm({ setUser }) {
         <form autoComplete="off" onSubmit={handleSubmit}>
           <div className="field">
             <p className="control has-icons-left">
-              <input className="input is-medium" type="text" name="email" placeholder="Email" value={credentials.email} onChange={handleChange} required />
+              <input className="input is-medium" type="email" name="email" placeholder="Email" value={credentials.email} onChange={handleChange} required />
               <span className="icon is-small is-left">
                 <i className="fas fa-envelope"></i>
               </span>
@@ -43,7 +43,7 @@ export default function LoginForm({ setUser }) {
           </div>
           <div className="field">
             <p className="control has-icons-left">
-              <input className="input is-medium" type="password" name="password" placeholder="Password" value={credentials.password} onChange={handleChange} required />
+              <input className="input is-medium" type="password" name="password" placeholder="Password" minLength="3" value={credentials.password} onChange={handleChange} required />
               <span className="icon is-small is-left">
                 <i className="fas fa-lock"></i>
               </span>

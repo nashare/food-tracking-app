@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { applyColors } from "./utils/mealUtils";
 import MealFilter from "../../components/MealFilter/MealFilter";
 
 function MealsPage({ user }) {
   const [meals, setMeals] = useState([]);
-  const [originalMeals, setOriginalMeals] = useState([]);
+  const originalMeals = useRef([]);
   const [mealToEdit, setMealToEdit] = useState(null);
   const [editedMeal, setEditedMeal] = useState({
     dateAndTime: '',
@@ -38,7 +38,7 @@ function MealsPage({ user }) {
       data = sortMeals(data);
       data = applyColors(data, user.caloriesPerDay);
       setMeals(data);
-      setOriginalMeals(data);
+      originalMeals.current = data;
     } catch (error) {
       console.error('Error fetching meals:', error);
     }
@@ -98,13 +98,8 @@ function MealsPage({ user }) {
       if (!response.ok) {
         throw new Error('Failed to update meal');
       }
-      // const updatedMeal = await response.json();
-      // setMeals(prevMeals => {
-      //   const updatedMeals = prevMeals.map(meal =>
-      //     meal._id === updatedMeal.meal._id ? updatedMeal.meal : meal
-      //   );
-      //   return applyColors(sortMeals(updatedMeals));
-      // });
+      setFilterFrom('');
+      setFilterTo('');
       fetchData();
       setMealToEdit(null);
     } catch (error) {
@@ -125,21 +120,21 @@ function MealsPage({ user }) {
     if (filterFrom === "") {
       const dateTo = new Date(filterTo);
       dateTo.setDate(dateTo.getDate() + 1);
-      filteredMeals = originalMeals.filter((meal) => {
+      filteredMeals = originalMeals.current.filter((meal) => {
         const mealDateToLocale = new Date(meal.dateAndTime).toLocaleString("en-US").split(', ')[0];
         const dateMeal = new Date(mealDateToLocale);
         return dateMeal <= dateTo;
       });
     } else if (filterTo === "") {
       const dateFrom = new Date(filterFrom)
-      filteredMeals = originalMeals.filter((meal) => {
+      filteredMeals = originalMeals.current.filter((meal) => {
         const mealDateToLocale = new Date(meal.dateAndTime).toLocaleString("en-US").split(', ')[0];
         const dateMeal = new Date(mealDateToLocale);
         return dateMeal >= dateFrom;
       });
     }
     else {
-      filteredMeals = originalMeals.filter((meal) => {
+      filteredMeals = originalMeals.current.filter((meal) => {
         const dateTo = new Date(filterTo);
         const dateFrom = new Date(filterFrom);
         dateTo.setDate(dateTo.getDate() + 1);

@@ -46,7 +46,7 @@ function MealsPage({ user }) {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   const handleDelete = async (mealId) => {
     try {
